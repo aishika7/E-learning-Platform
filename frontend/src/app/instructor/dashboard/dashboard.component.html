@@ -1,0 +1,19 @@
+<div class="container mt-4">
+  <h2>Instructor Dashboard</h2>
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Course</th>
+        <th>Enrollments</th>
+        <th>Avg Progress (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of metrics">
+        <td>{{ c.courseTitle }}</td>
+        <td>{{ c.enrollments }}</td>
+        <td>{{ c.avgProgress }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

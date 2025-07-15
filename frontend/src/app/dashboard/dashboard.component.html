@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .dashboard-body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #4a00e0, #8e2de2);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .dashboard-container {
+      background: #fff;
+      color: #333;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+      animation: fadeSlideIn 0.6s ease;
+      text-align: center;
+    }
+
+    .header h2 {
+      color: #4a00e0;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      margin-bottom: 30px;
+      font-size: 1rem;
+    }
+
+    .card {
+      background: #f3f3f3;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .card p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .btn {
+      background: #4a00e0;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      display: inline-block;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #3700b3;
+    }
+
+    .btn.secondary {
+      background: #8e2de2;
+    }
+
+    .btn.secondary:hover {
+      background: #6d1edc;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+      background: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #c2185b;
+    }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+      0% {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .dashboard-container {
+        padding: 25px 20px;
+      }
+
+      .admin-actions {
+        flex-direction: column;
+      }
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: #f0f2f5;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #4a00e0;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h3 {
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin: 15px 0;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      display: block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #3700b3;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      animation: fadeSlideIn 0.6s ease;
+    }
+
+    .profile {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .progress-section,
+    .admin-section {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-card {
+      margin: 15px 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: #eee;
+      height: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #4a00e0;
+      transition: width 0.4s ease;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dashboard {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        text-align: center;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .profile {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard-body">
+  <div class="dashboard-container">
+    <!-- Header -->
+    <div class="header">
+      <h2>Welcome, {{ userName }} 🎉</h2>
+      <p>Your role: <strong>{{ role }}</strong></p>
+    </div>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard">
+      <!-- Side Navigation -->
+      <aside class="sidebar">
+        <h3>📚 EduPlatform</h3>
+        <ul>
+          <li><a routerLink="/dashboard">Dashboard</a></li>
+          <li *ngIf="role === 'student'"><a routerLink="/courses">My Courses</a></li>
+          <li *ngIf="role === 'admin'"><a routerLink="/courses/add">Add Course</a></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Profile Info -->
+        <section class="profile">
+          <img [src]="" alt="Profile Picture" class="avatar" />
+          <div>
+            <h2>Hello, {{ userName }} 👋</h2>
+            <p>Email: {{ userEmail }}</p>
+            <p>Role: <strong>{{ role }}</strong></p>
+          </div>
+        </section>
+
+        <!-- Student Section -->
+        <section *ngIf="role === 'student'" class="progress-section">
+          <h3>Your Course Progress</h3>
+          <div *ngFor="let course of enrolledCourses" class="progress-card">
+            <p>{{ course.name }}</p>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="course.progress"></div>
+            </div>
+            <span>{{ course.progress }}%</span>
+          </div>
+
+          <div class="card student">
+            <p>Ready to learn? Browse courses below!</p>
+            <a routerLink="/courses" class="btn">📚 View Courses</a>
+          </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section *ngIf="role === 'admin'" class="admin-section">
+          <h3>Admin Tools</h3>
+          <p>You can manage courses or track platform metrics.</p>
+          <div class="card admin">
+            <p>Manage your learning platform!</p>
+            <div class="admin-actions">
+              <a routerLink="/courses/add" class="btn">➕ Add New Course</a>
+              <a routerLink="/courses" class="btn secondary">📘 View All Courses</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Logout -->
+        <button (click)="logout()" class="logout-btn">🚪 Logout</button>
+      </main>
+    </div>
+  </div>
+</body>
+
+
+</html>

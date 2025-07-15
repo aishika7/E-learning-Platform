@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+  <div class="row">
+    <div class="col-md-4" *ngIf="stats">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header">Total Users</div>
+        <div class="card-body"><h4>{{ stats.totalUsers }}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="stats">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-header">Total Students</div>
+        <div class="card-body"><h4>{{ stats.totalStudents }}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="stats">
+      <div class="card text-white bg-info mb-3">
+        <div class="card-header">Total Instructors</div>
+        <div class="card-body"><h4>{{ stats.totalInstructors }}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="stats">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-header">Courses</div>
+        <div class="card-body"><h4>{{ stats.totalCourses }}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="stats">
+      <div class="card text-white bg-danger mb-3">
+        <div class="card-header">Enrollments</div>
+        <div class="card-body"><h4>{{ stats.totalEnrollments }}</h4></div>
+      </div>
+    </div>
+  </div>
+</div>

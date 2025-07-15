@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="course-list.component.css">
+    <title>Document</title>
+</head>
+<body>
+    <h2 *ngIf="role === 'instructor'">Your Courses</h2>
+<h2 *ngIf="role === 'student'">Enrolled Courses</h2>
+<h2 *ngIf="role === 'admin' || !role">All Courses</h2>
+
+<!-- Add Course Button (Only for Instructor) -->
+<button *ngIf="role === 'instructor'" routerLink="/courses/add">+ Add New Course</button>
+
+<!-- Browse Button (Only for Student) -->
+<button *ngIf="role === 'student'" routerLink="/courses">Browse More Courses</button>
+
+<!-- List Courses -->
+<div *ngFor="let course of courses" class="course-card">
+  <img [src]="course.thumbnail" alt="Course image" />
+  <div class="content">
+    <h3>{{ course.title }}</h3>
+    <p>{{ course.description }}</p>
+    <button [routerLink]="['/courses', course._id]">View Details</button>
+  </div>
+</div>
+
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Available Courses</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div *ngFor="let course of courses" class="col">
+      <div class="card h-100 shadow-sm">
+        <img [src]="course.thumbnail" class="card-img-top" alt="Course Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ course.title }}</h5>
+          <p class="card-text text-muted">{{ course.description | slice:0:100 }}...</p>
+          <a [routerLink]="['/courses', course._id]" class="btn btn-primary w-100">View Course</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

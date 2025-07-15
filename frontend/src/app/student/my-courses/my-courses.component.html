@@ -1,0 +1,22 @@
+<a routerLink="/my-courses" class="nav-link">My Courses</a>
+
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">My Enrolled Courses</h2>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="courses.length > 0; else noCourses">
+    <div class="col" *ngFor="let course of courses">
+      <div class="card h-100 shadow-sm">
+        <img [src]="course.thumbnail" class="card-img-top" alt="Course thumbnail" />
+        <div class="card-body">
+          <h5 class="card-title">{{ course.title }}</h5>
+          <p class="card-text text-muted">{{ course.description }}</p>
+          <a [routerLink]="['/courses', course._id]" class="btn btn-primary w-100">View Course</a>
+        </div>
+       </div>
+    </div>
+  </div>
+
+  <ng-template #noCourses>
+    <div class="alert alert-info text-center">You haven’t enrolled in any courses yet.</div>
+  </ng-template>
+</div>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="course-form.component.css">
+</head>
+<body>
+    <h2>Create New Course</h2>
+
+<h2>Create New Course</h2>
+
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
+  <label>Title:</label>
+  <input type="text" formControlName="title" required />
+
+  <label>Description:</label>
+  <textarea formControlName="description" rows="4"></textarea>
+
+  <label>Thumbnail URL:</label>
+  <input type="text" formControlName="thumbnail" />
+  <div *ngIf="courseForm.value.thumbnail">
+    <p>Preview:</p>
+    <img [src]="courseForm.value.thumbnail" alt="Thumbnail preview" width="200" />
+  </div>
+
+  <label>Course Level:</label>
+  <select formControlName="level" required>
+    <option value="">Select</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
+
+  <label>Category:</label>
+  <select formControlName="category" required>
+    <option value="">Select</option>
+    <option value="Programming">Programming</option>
+    <option value="Design">Design</option>
+    <option value="Business">Business</option>
+    <option value="Marketing">Marketing</option>
+  </select>
+
+  <label>Duration:</label>
+  <input type="text" formControlName="duration" placeholder="e.g. 6 weeks" />
+
+  <label>Language:</label>
+  <input type="text" formControlName="language" />
+
+  <label>Price (INR):</label>
+  <input type="number" formControlName="price" />
+
+  <button type="submit">Create Course</button>
+</form>
+
+</body>
+</html>
