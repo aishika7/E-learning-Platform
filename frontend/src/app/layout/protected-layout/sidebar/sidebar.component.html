@@ -1,0 +1,16 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <span>ELearn</span>
+    <span class="role-badge" *ngIf="roleLabel()">{{ roleLabel() }}</span>
+  </div>
+
+  <nav class="nav-list">
+    <a *ngFor="let item of navItems()" 
+       [routerLink]="item.route" 
+       routerLinkActive="active" 
+       class="nav-item">
+      <span class="material-icons-round">{{ item.icon }}</span>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>

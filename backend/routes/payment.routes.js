@@ -1,29 +1,11 @@
+// routes/payment.routes.js — FIXED: single import, no duplicate handlers
 const express = require('express');
 const router = express.Router();
-const Razorpay = require('razorpay');
-require('dotenv').config();
+const auth = require('../middlewares/auth.middleware');
+const requireRole = require('../middlewares/role.middleware');
+const { createOrder, verifyPayment } = require('../controllers/payment.controller');
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
-const { createOrder } = require('../controllers/paymentController');
-router.post('/create-order', createOrder);
-
-router.post('/create-order', async (req, res) => {
-  const { amount, currency = 'INR', receipt } = req.body;
-
-  try {
-    const order = await razorpay.orders.create({
-      amount: amount * 100, // in paisa
-      currency,
-      receipt,
-    });
-
-    res.json(order);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.post('/create-order', auth, requireRole('student'), createOrder);
+router.post('/verify', auth, requireRole('student'), verifyPayment);
 
 module.exports = router;

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-domain.com/api' // Replace this when deploying
+  apiUrl: 'https://your-production-url.com/api' // To be updated later
 };

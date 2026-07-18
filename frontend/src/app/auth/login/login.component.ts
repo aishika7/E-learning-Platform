@@ -1,34 +1,32 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AuthService } from '../../core/auth.service';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  form: FormGroup;
-  isDarkMode = false;
-  successMessage = '';
+  private fb = inject(FormBuilder);
+  public authService = inject(AuthService); // Public for template binding
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
-    this.form = this.fb.group({
-      email: [''],
-      password: ['']
-    });
-  }
-toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-  }
+  loginForm = this.fb.nonNullable.group({
+    email: ['student@elearn.com', [Validators.required, Validators.email]],
+    password: ['Student@123', Validators.required]
+  });
+
+  errorMsg = '';
+
   onSubmit() {
-    if (this.form.valid) {
-      this.successMessage = 'Login successful!';
-    this.auth.login(this.form.value).subscribe((res: any) => {
-      this.auth.storeToken(res.token);
-      this.router.navigate(['/dashboard']); 
-    });}else {
-      this.successMessage = '';
-    }
+    if (this.loginForm.invalid) return;
+
+    this.errorMsg = '';
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
+      next: () => this.authService.redirectToDashboard(),
+      error: (err) => {
+        this.errorMsg = err.error?.message || 'Login failed. Please try again.';
+      }
+    });
   }
 }

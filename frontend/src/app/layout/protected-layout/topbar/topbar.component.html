@@ -1,0 +1,16 @@
+<header class="topbar">
+  <div class="user-menu" *ngIf="user()">
+    <div class="user-info">
+      <span class="user-name">{{ user()?.name }}</span>
+      <span class="user-email">{{ user()?.email }}</span>
+    </div>
+    
+    <div class="avatar">
+      {{ getInitials() }}
+    </div>
+
+    <button class="logout-btn" (click)="logout()" title="Logout">
+      <span class="material-icons-round">logout</span>
+    </button>
+  </div>
+</header>

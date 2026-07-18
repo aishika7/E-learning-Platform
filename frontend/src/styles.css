@@ -1,4 +1,114 @@
-/* You can add global styles to this file, and also import other style files */
+/* frontend/src/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
+@import '@angular/cdk/overlay-prebuilt.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS — Light Mode (default)
+───────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --primary:           oklch(0.55 0.20 265);    /* Deep indigo */
+  --primary-light:     oklch(0.70 0.18 265);
+  --primary-dark:      oklch(0.40 0.22 265);
+  --primary-fg:        oklch(0.98 0 0);
+
+  /* Accent */
+  --accent:            oklch(0.65 0.20 34.95);  /* Amber-orange */
+  --accent-fg:         oklch(0.98 0 0);
+
+  /* Semantic */
+  --success:           oklch(0.65 0.20 140.6);
+  --warning:           oklch(0.80 0.18 84.4);
+  --destructive:       oklch(0.58 0.24 27.3);
+  --destructive-fg:    oklch(0.98 0 0);
+
+  /* Surfaces */
+  --background:        oklch(0.96 0 0);
+  --foreground:        oklch(0.14 0 0);
+  --card:              oklch(1.00 0 0);
+  --card-fg:           oklch(0.14 0 0);
+  --muted:             oklch(0.97 0 0);
+  --muted-fg:          oklch(0.55 0 0);
+  --border:            oklch(0.92 0 0);
+  --input:             oklch(0.92 0 0);
+  --ring:              oklch(0.55 0.20 265);
+
+  /* Sidebar */
+  --sidebar-bg:        oklch(0.18 0.065 253);
+  --sidebar-fg:        oklch(0.90 0.010 259);
+  --sidebar-active:    oklch(0.24 0.074 254);
+  --sidebar-active-fg: oklch(0.65 0.20 34.95);
+  --sidebar-hover:     oklch(0.24 0.074 254);
+  --sidebar-border:    oklch(0.28 0.074 255);
+
+  /* Spacing & Shape */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* ─────────────────────────────────────────────
+   DARK MODE TOKENS
+───────────────────────────────────────────── */
+.dark {
+  --primary:        oklch(0.61 0.19 265);
+  --background:     oklch(0.14 0 0);
+  --foreground:     oklch(0.98 0 0);
+  --card:           oklch(0.20 0 0);
+  --card-fg:        oklch(0.98 0 0);
+  --muted:          oklch(0.27 0 0);
+  --muted-fg:       oklch(0.71 0 0);
+  --border:         oklch(0.27 0 0);
+  --input:          oklch(0.27 0 0);
+  --ring:           oklch(0.44 0 0);
+
+  /* Sidebar stays dark in both modes */
+  --sidebar-bg:        oklch(0.18 0.065 253);
+  --sidebar-fg:        oklch(0.90 0.010 259);
+  --sidebar-active:    oklch(0.24 0.074 254);
+  --sidebar-active-fg: oklch(0.61 0.19 34.78);
+}
+
+/* ─────────────────────────────────────────────
+   BASE LAYER
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  overscroll-behavior: none;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: clamp(4px, 0.4vw, 8px); height: clamp(4px, 0.4vw, 8px); }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(0.71 0 0); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.55 0 0); }
+.dark ::-webkit-scrollbar-thumb { background: oklch(0.44 0 0); }
+.dark ::-webkit-scrollbar-thumb:hover { background: oklch(0.55 0 0); }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Global Utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}

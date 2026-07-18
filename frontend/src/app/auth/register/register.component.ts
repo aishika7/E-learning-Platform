@@ -1,27 +1,37 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AuthService } from '../../core/auth.service';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css'] // using same styles as login basically
 })
 export class RegisterComponent {
-  form: FormGroup;
+  private fb = inject(FormBuilder);
+  public authService = inject(AuthService);
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
-    this.form = this.fb.group({
-      name: [''],
-      email: [''],
-      password: ['']
-    });
-  }
+  registerForm = this.fb.nonNullable.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    role: ['student', Validators.required]
+  });
+
+  errorMsg = '';
 
   onSubmit() {
-    this.auth.register(this.form.value).subscribe((res: any) => {
-      this.auth.storeToken(res.token);
-      this.router.navigate(['/dashboard']); // We'll create this later
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    this.errorMsg = '';
+    this.authService.register(this.registerForm.getRawValue()).subscribe({
+      next: () => this.authService.redirectToDashboard(),
+      error: (err) => {
+        this.errorMsg = err.error?.message || 'Registration failed. Please try again.';
+      }
     });
   }
 }

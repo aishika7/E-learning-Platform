@@ -1,48 +1,110 @@
+// controllers/dashboard.controller.js
 const User = require('../models/user.model');
 const Course = require('../models/course.model');
 const Enrollment = require('../models/enrollment.model');
+const { createSuccess, createError } = require('../utils/response.utils');
 
-exports.getAdminMetrics = async (req, res) => {
-  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
+// ─── Admin Dashboard ──────────────────────────────────────────────────────────
 
+exports.getAdminMetrics = async (req, res, next) => {
   try {
-    const totalUsers = await User.countDocuments();
-    const totalStudents = await User.countDocuments({ role: 'student' });
-    const totalInstructors = await User.countDocuments({ role: 'instructor' });
-    const totalCourses = await Course.countDocuments();
-    const totalEnrollments = await Enrollment.countDocuments();
+    const [totalUsers, totalStudents, totalInstructors, totalCourses, totalEnrollments, recentUsers] =
+      await Promise.all([
+        User.countDocuments(),
+        User.countDocuments({ role: 'student' }),
+        User.countDocuments({ role: 'instructor' }),
+        Course.countDocuments(),
+        Enrollment.countDocuments(),
+        User.find().sort({ createdAt: -1 }).limit(5).select('name email role createdAt avatar'),
+      ]);
 
-    res.json({ totalUsers, totalStudents, totalInstructors, totalCourses, totalEnrollments });
+    res.json(
+      createSuccess({
+        metrics: { totalUsers, totalStudents, totalInstructors, totalCourses, totalEnrollments },
+        recentUsers,
+      })
+    );
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
 };
 
-exports.getInstructorMetrics = async (req, res) => {
-  if (req.user.role !== 'instructor') return res.status(403).json({ message: 'Forbidden' });
+// ─── Instructor Dashboard ─────────────────────────────────────────────────────
 
+exports.getInstructorMetrics = async (req, res, next) => {
   try {
-    const courses = await Course.find({ createdBy: req.user.id });
-    const courseIds = courses.map(c => c._id);
+    const courses = await Course.find({ createdBy: req.user.id }).lean();
+    const courseIds = courses.map((c) => c._id);
 
     const enrollments = await Enrollment.find({ course: { $in: courseIds } });
 
-    // Group by course
-    const metrics = courses.map(course => {
-      const courseEnrollments = enrollments.filter(e => e.course.toString() === course._id.toString());
-      const avgProgress = courseEnrollments.length
-        ? courseEnrollments.reduce((sum, e) => sum + (e.progress?.percentage || 0), 0) / courseEnrollments.length
-        : 0;
+    const metrics = courses.map((course) => {
+      const courseEnrollments = enrollments.filter(
+        (e) => e.course.toString() === course._id.toString()
+      );
+      const avgProgress =
+        courseEnrollments.length
+          ? courseEnrollments.reduce((sum, e) => sum + (e.progress?.percentage || 0), 0) /
+            courseEnrollments.length
+          : 0;
 
       return {
+        courseId: course._id,
         courseTitle: course.title,
+        thumbnail: course.thumbnail,
+        isPublished: course.isPublished,
         enrollments: courseEnrollments.length,
-        avgProgress: Math.round(avgProgress)
+        avgProgress: Math.round(avgProgress),
+        completedCount: courseEnrollments.filter((e) => e.progress?.percentage === 100).length,
       };
     });
 
-    res.json({ metrics });
+    const totalStudents = new Set(enrollments.map((e) => e.student.toString())).size;
+    const totalCourses = courses.length;
+    const publishedCourses = courses.filter((c) => c.isPublished).length;
+
+    res.json(
+      createSuccess({
+        summary: { totalCourses, publishedCourses, totalStudents },
+        courseMetrics: metrics,
+      })
+    );
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
+  }
+};
+
+// ─── Student Dashboard ────────────────────────────────────────────────────────
+
+exports.getStudentMetrics = async (req, res, next) => {
+  try {
+    const enrollments = await Enrollment.find({ student: req.user.id })
+      .populate('course', 'title thumbnail category level duration')
+      .sort({ updatedAt: -1 });
+
+    const totalEnrolled = enrollments.length;
+    const completed = enrollments.filter((e) => e.progress?.percentage === 100).length;
+    const avgProgress =
+      totalEnrolled > 0
+        ? Math.round(
+            enrollments.reduce((sum, e) => sum + (e.progress?.percentage || 0), 0) / totalEnrolled
+          )
+        : 0;
+
+    const recentCourses = enrollments.slice(0, 3).map((e) => ({
+      enrollmentId: e._id,
+      course: e.course,
+      progress: e.progress,
+      enrolledAt: e.createdAt,
+    }));
+
+    res.json(
+      createSuccess({
+        metrics: { totalEnrolled, completed, avgProgress },
+        recentCourses,
+      })
+    );
+  } catch (err) {
+    next(err);
   }
 };
