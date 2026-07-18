@@ -90,7 +90,7 @@ export class AdminDashboardComponent implements OnInit {
   courses: Course[] = [];
   
   get uniqueInstructors() { 
-    return new Set(this.courses.map(c => c.instructor._id)).size; 
+    return new Set(this.courses.map(c => c.createdBy?._id)).size; 
   }
   
   get totalValue() { 

@@ -124,6 +124,30 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/reset-password/${token}`, { password });
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put<AuthResponse>(`${environment.apiUrl}/auth/profile`, data).pipe(
+      tap(res => {
+        if (res.success && res.data) {
+          const newToken = res.data.token || this.getToken()!;
+          this.setSession(newToken, res.data.user);
+          this.state$.next({
+            ...this.state$.value,
+            user: res.data.user,
+            token: newToken
+          });
+        }
+      })
+    );
+  }
+
   // ─── Accessors ──────────────────────────────────────────────────────────────
 
   getRole(): 'admin' | 'instructor' | 'student' | null {

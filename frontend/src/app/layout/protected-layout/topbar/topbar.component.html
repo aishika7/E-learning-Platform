@@ -1,13 +1,18 @@
 <header class="topbar">
   <div class="user-menu" *ngIf="user()">
+    <button class="theme-toggle" (click)="toggleDarkMode()" title="Toggle Dark Mode">
+      <span class="material-icons-round">{{ isDark ? 'light_mode' : 'dark_mode' }}</span>
+    </button>
+    
     <div class="user-info">
       <span class="user-name">{{ user()?.name }}</span>
       <span class="user-email">{{ user()?.email }}</span>
     </div>
     
-    <div class="avatar">
+    <div class="avatar" *ngIf="!user()?.avatar">
       {{ getInitials() }}
     </div>
+    <img *ngIf="user()?.avatar" [src]="user()?.avatar" class="avatar-img" alt="Avatar" />
 
     <button class="logout-btn" (click)="logout()" title="Logout">
       <span class="material-icons-round">logout</span>

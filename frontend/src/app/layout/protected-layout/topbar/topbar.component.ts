@@ -71,15 +71,41 @@ import { AuthService } from '../../../core/services/auth.service';
       background-color: var(--muted);
       color: var(--destructive);
     }
+    .theme-toggle {
+      background: none; border: none; color: var(--muted-fg);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 8px; border-radius: var(--radius-full); transition: all 0.2s;
+      margin-right: 1rem;
+    }
+    .theme-toggle:hover { background-color: var(--muted); color: var(--foreground); }
+    
+    .avatar-img {
+      width: 36px; height: 36px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border);
+    }
   `]
 })
 export class TopbarComponent {
   private authService = inject(AuthService);
   user = this.authService.user;
+  isDark = false;
+
+  constructor() {
+    this.isDark = document.documentElement.classList.contains('dark');
+  }
 
   getInitials(): string {
     const name = this.user()?.name || '?';
     return name.charAt(0).toUpperCase();
+  }
+
+  toggleDarkMode() {
+    this.isDark = !this.isDark;
+    if (this.isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   logout() {

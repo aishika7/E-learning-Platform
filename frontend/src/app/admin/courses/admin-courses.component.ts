@@ -28,7 +28,7 @@ import { CourseService, Course } from '../../core/services/course.service';
                 <span>{{ course.title }}</span>
               </div>
             </td>
-            <td>{{ course.instructor?.name || 'Unknown' }}</td>
+            <td>{{ course.createdBy.name || 'Unknown' }}</td>
             <td>{{ course.price === 0 ? 'Free' : (course.price | currency:'INR') }}</td>
             <td>
               <span class="badge" [class.published]="course.isPublished">{{ course.isPublished ? 'Published' : 'Draft' }}</span>
