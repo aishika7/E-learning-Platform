@@ -1,0 +1,103 @@
+<div class="page-header">
+  <button class="btn-icon" routerLink="/app/instructor/courses">
+    <span class="material-icons-round">arrow_back</span>
+  </button>
+  <h2>{{ isEditMode ? 'Edit Course' : 'Create New Course' }}</h2>
+</div>
+
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
+  
+  <div class="form-section">
+    <h3>Basic Information</h3>
+    
+    <div class="form-group">
+      <label for="title">Course Title</label>
+      <input id="title" type="text" formControlName="title" placeholder="e.g. Advanced Angular Patterns" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" formControlName="category">
+          <option value="Technology">Technology</option>
+          <option value="Business">Business</option>
+          <option value="Design">Design</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price (₹)</label>
+        <input id="price" type="number" formControlName="price" min="0" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" rows="4" placeholder="What will students learn?"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="thumbnail">Thumbnail Image URL</label>
+      <input id="thumbnail" type="text" formControlName="thumbnail" placeholder="https://..." />
+    </div>
+
+    <div class="toggle-group">
+      <label class="toggle-switch">
+        <input type="checkbox" formControlName="isPublished" />
+        <span class="slider"></span>
+      </label>
+      <div class="toggle-label">
+        <strong>Publish Course</strong>
+        <p class="text-muted">Students can see and enroll in this course.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-header-flex">
+      <h3>Curriculum Modules</h3>
+      <button type="button" class="btn-secondary" (click)="addModule()">
+        <span class="material-icons-round">add</span> Add Module
+      </button>
+    </div>
+
+    <div formArrayName="modules" class="modules-list">
+      <div *ngFor="let module of modules.controls; let i=index" [formGroupName]="i" class="module-card">
+        
+        <div class="module-header">
+          <h4>Module {{ i + 1 }}</h4>
+          <button type="button" class="btn-icon destructive" (click)="removeModule(i)" *ngIf="modules.length > 1">
+            <span class="material-icons-round">delete</span>
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>Module Title</label>
+          <input type="text" formControlName="title" placeholder="e.g. Introduction to Signals" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Video URL (Optional)</label>
+            <input type="text" formControlName="videoUrl" placeholder="YouTube or Vimeo URL" />
+          </div>
+          <div class="form-group">
+            <label>Duration (mins)</label>
+            <input type="number" formControlName="duration" min="0" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-text" routerLink="/app/instructor/courses">Cancel</button>
+    <button type="submit" class="btn-primary" [disabled]="courseForm.invalid || isLoading">
+      <span *ngIf="isLoading" class="material-icons-round spinner">sync</span>
+      {{ isEditMode ? 'Save Changes' : 'Create Course' }}
+    </button>
+  </div>
+
+</form>

@@ -1,0 +1,77 @@
+<div class="loading-state" *ngIf="isLoading">
+  <span class="material-icons-round spinner">sync</span>
+  <p>Loading your learning space...</p>
+</div>
+
+<div class="player-layout" *ngIf="!isLoading && enrollment">
+  
+  <!-- Left Side: Video & Notes -->
+  <div class="main-content">
+    <div class="video-container">
+      <div class="video-placeholder" *ngIf="!currentModule?.videoUrl">
+        <span class="material-icons-round">play_circle_outline</span>
+        <p>No video available for this module.</p>
+      </div>
+      <!-- If we had a real URL, we'd use an iframe or video tag here -->
+      <div class="video-placeholder" *ngIf="currentModule?.videoUrl">
+        <span class="material-icons-round">play_arrow</span>
+        <p>Playing: {{ currentModule?.videoUrl }}</p>
+      </div>
+    </div>
+
+    <div class="module-info">
+      <div class="info-header">
+        <h2>{{ currentModule?.title }}</h2>
+        <button class="btn-primary" (click)="toggleComplete()">
+          <span class="material-icons-round">{{ isModuleCompleted(activeModuleIndex) ? 'check_circle' : 'radio_button_unchecked' }}</span>
+          {{ isModuleCompleted(activeModuleIndex) ? 'Completed' : 'Mark Complete' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="notes-panel">
+      <h3>My Notes</h3>
+      <div class="note-input">
+        <textarea placeholder="Type your notes for this module here... (Will be saved automatically)"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Sidebar Curriculum -->
+  <div class="curriculum-sidebar">
+    <div class="sidebar-header">
+      <h3>Course Content</h3>
+      <div class="progress-text">
+        {{ enrollment.progress.length }} / {{ enrollment.course.modules.length }} completed
+      </div>
+    </div>
+
+    <div class="modules-list">
+      <div 
+        class="module-item" 
+        *ngFor="let mod of enrollment.course.modules; let i = index"
+        [class.active]="activeModuleIndex === i"
+        (click)="selectModule(i)">
+        
+        <div class="module-status">
+          <span class="material-icons-round completed-icon" *ngIf="isModuleCompleted(i)">check_circle</span>
+          <span class="module-number" *ngIf="!isModuleCompleted(i)">{{ i + 1 }}</span>
+        </div>
+        
+        <div class="module-details">
+          <h4>{{ mod.title }}</h4>
+          <span class="duration" *ngIf="mod.duration">{{ mod.duration }} mins</span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="empty-state" *ngIf="!isLoading && !enrollment">
+  <span class="material-icons-round empty-icon">error_outline</span>
+  <h3>Enrollment not found</h3>
+  <p class="text-muted">You are not enrolled in this course.</p>
+  <button class="btn-primary" routerLink="/app/student/courses">Browse Courses</button>
+</div>

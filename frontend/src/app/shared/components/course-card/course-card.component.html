@@ -1,0 +1,41 @@
+<div class="course-card" (click)="onClick()">
+  <div class="thumbnail-wrapper">
+    <img [src]="course.thumbnail || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop'" 
+         [alt]="course.title" class="thumbnail" />
+    <div class="status-badge" *ngIf="showStatus" [class.published]="course.isPublished">
+      {{ course.isPublished ? 'Published' : 'Draft' }}
+    </div>
+  </div>
+
+  <div class="content">
+    <span class="category">{{ course.category || 'Technology' }}</span>
+    <h3 class="title">{{ course.title }}</h3>
+    
+    <div class="instructor">
+      <span class="material-icons-round">account_circle</span>
+      {{ course.instructor.name || 'Instructor' }}
+    </div>
+
+    <!-- Pricing (Catalog mode) -->
+    <div class="footer" *ngIf="progress === undefined">
+      <div class="modules-count">
+        <span class="material-icons-round">view_module</span>
+        {{ course.modules.length || 0 }} Modules
+      </div>
+      <div class="price" *ngIf="showPrice">
+        {{ course.price === 0 ? 'Free' : (course.price | currency:'INR') }}
+      </div>
+    </div>
+
+    <!-- Progress (Student mode) -->
+    <div class="progress-section" *ngIf="progress !== undefined">
+      <div class="progress-header">
+        <span>Progress</span>
+        <span>{{ progress }}%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" [style.width.%]="progress"></div>
+      </div>
+    </div>
+  </div>
+</div>

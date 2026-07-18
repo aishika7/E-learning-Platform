@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
-import { NAV_CONFIG } from '../nav-config';
+import { AuthService } from '../../../core/services/auth.service';
+import { NAV_CONFIG } from '../../nav-config';
 
 @Component({
   selector: 'app-sidebar',
